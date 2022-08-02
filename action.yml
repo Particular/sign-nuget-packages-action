@@ -24,7 +24,7 @@ runs:
       run: |
         cd nugets
 
-        NuGetKeyVaultSignTool sign $path `
+        NuGetKeyVaultSignTool sign *.nupkg `
         --file-digest sha256 `
         --timestamp-rfc3161 http://timestamp.digicert.com `
         --timestamp-digest sha256 `
