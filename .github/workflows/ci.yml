@@ -36,9 +36,11 @@ jobs:
       - name: Publish NuGet packages
         uses: actions/upload-artifact@v3.1.0
         with:
-          name: nugets
+          name: nugets-${{ matrix.os }}
           path: nugets/*
           retention-days: 1
       - name: Validate package signature
         shell: pwsh
-        run: dotnet nuget verify nugets/*.nupkg
+        run: |
+          cd nugets
+          dotnet nuget verify *.nupkg
