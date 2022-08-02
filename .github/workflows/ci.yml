@@ -26,6 +26,9 @@ jobs:
           dotnet-version: 6.0.x
       - name: Build fake NuGet package
         run: dotnet build test-package --configuration Release
+      - name: Temp copy package
+        shell: pwsh
+        run: cp nugets/TestLib.1.0.0.nupkg nugets/TestLib.1.0.1.nupkg
       - name: Run
         uses: ./
         with:
