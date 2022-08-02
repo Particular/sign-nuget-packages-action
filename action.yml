@@ -22,14 +22,16 @@ runs:
     - name: Sign NuGet Packages
       shell: pwsh
       run: |
-        $path = Join-Path nugets *.nupkg
+        Get-ChildItem -Path nugets | ForEach-Object {
 
-        NuGetKeyVaultSignTool sign $path `
-        --file-digest sha256 `
-        --timestamp-rfc3161 http://timestamp.digicert.com `
-        --timestamp-digest sha256 `
-        --azure-key-vault-url https://particularcodesigning.vault.azure.net `
-        --azure-key-vault-client-id ${{ inputs.client-id }} `
-        --azure-key-vault-tenant-id ${{ inputs.tenant-id }} `
-        --azure-key-vault-client-secret ${{ inputs.client-secret }} `
-        --azure-key-vault-certificate ${{ inputs.certificate-name }}
+          NuGetKeyVaultSignTool sign $_.FullName `
+          --file-digest sha256 `
+          --timestamp-rfc3161 http://timestamp.digicert.com `
+          --timestamp-digest sha256 `
+          --azure-key-vault-url https://particularcodesigning.vault.azure.net `
+          --azure-key-vault-client-id ${{ inputs.client-id }} `
+          --azure-key-vault-tenant-id ${{ inputs.tenant-id }} `
+          --azure-key-vault-client-secret ${{ inputs.client-secret }} `
+          --azure-key-vault-certificate ${{ inputs.certificate-name }}
+
+        }

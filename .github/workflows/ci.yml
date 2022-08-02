@@ -24,8 +24,8 @@ jobs:
         uses: actions/setup-dotnet@v2.1.0
         with:
           dotnet-version: 6.0.x
-      - name: Build fake NuGet package
-        run: dotnet build test-package --configuration Release
+      - name: Build fake NuGet packages
+        run: dotnet build test-project --configuration Release
       - name: Run
         uses: ./
         with:
