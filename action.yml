@@ -23,6 +23,7 @@ runs:
       shell: pwsh
       run: |
         $path = Join-Path nugets *.nupkg
+        echo "Sign path = $path"
 
         NuGetKeyVaultSignTool sign $path `
         --file-digest sha256 `
