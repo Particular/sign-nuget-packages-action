@@ -14,9 +14,7 @@
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <AssemblyFileVersion>1.0.0</AssemblyFileVersion>
     <AssemblyInformationalVersion>1.0.0</AssemblyInformationalVersion>
-    <PropertyGroup Condition="'$(CI)' != ''">
-      <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    </PropertyGroup>
+    <ContinuousIntegrationBuild Condition="'$(CI)' != ''">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
 </Project>
