@@ -22,7 +22,9 @@ runs:
     - name: Sign NuGet Packages
       shell: pwsh
       run: |
-        NuGetKeyVaultSignTool sign nugets/*.nupkg `
+        $path = Join-Path nugets *.nupkg
+
+        NuGetKeyVaultSignTool sign $path `
         --file-digest sha256 `
         --timestamp-rfc3161 http://timestamp.digicert.com `
         --timestamp-digest sha256 `

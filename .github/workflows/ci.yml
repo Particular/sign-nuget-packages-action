@@ -42,5 +42,5 @@ jobs:
       - name: Validate package signature
         shell: pwsh
         run: |
-          cd nugets
-          dotnet nuget verify *.nupkg
+          $path = Join-Path nugets *.nupkg
+          dotnet nuget verify $path
