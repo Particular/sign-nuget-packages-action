@@ -16,12 +16,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3.0.2
-      - name: Create fake artifacts
-        shell: pwsh
-        run: |
-          mkdir nugets
-          echo "This is not really a NuGet package" > nugets/Fake.Package1.nupkg
-          echo "This is not really a NuGet package" > nugets/Fake.Package2.nupkg
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v2.1.0
+        with:
+          dotnet-version: 6.0.x
+      - name: Build fake NuGet package
+        run: dotnet build test-package
       - name: Run
         uses: ./
         with:
