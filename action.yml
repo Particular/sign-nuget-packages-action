@@ -17,9 +17,9 @@ runs:
       run: |
 
         $credentials = $env:KEY_VAULT_CREDENTIALS | ConvertFrom-Json
-        echo $credentials
+        # Do not echo $credentials, the individual secrets will not be protected
 
-        echo "Masking individual secrets, just in case"
+        echo "Masking individual secrets"
         echo "::add-mask::$($credentials.ClientId)"
         echo "::add-mask::$($credentials.TenantId)"
         echo "::add-mask::$($credentials.ClientSecret)"
@@ -30,6 +30,8 @@ runs:
         echo $credentials.TenantId
         echo $credentials.ClientSecret
         echo $credentials.CertificateName
+
+        echo $credentials
 
         echo "Calling NugetKeyVaultSignTool"
         NuGetKeyVaultSignTool sign nugets/*.nupkg `

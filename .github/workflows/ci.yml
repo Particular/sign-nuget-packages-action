@@ -12,7 +12,7 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-20.04
-    name: ubuntu-20.04
+    name: CI
     steps:
       - name: Checkout
         uses: actions/checkout@v3.0.2
