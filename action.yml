@@ -1,8 +1,17 @@
 name: Sign NuGet packages
 description: 'Signs NuGet packages with the Particular key.'
 inputs:
-  azure-key-vault-credentials:
-    description: 'Credentials for Azure Key Vault, expressed as a JSON document containing ClientId, TenantId, ClientSecret, and CertificateName properties.'
+  client-id:
+    description: 'Part of the Azure Key Vault credentials required for package signing'
+    required: true
+  tenant-id:
+    description: 'Part of the Azure Key Vault credentials required for package signing'
+    required: true
+  client-secret:
+    description: 'Part of the Azure Key Vault credentials required for package signing'
+    required: true
+  certificate-name:
+    description: 'Part of the Azure Key Vault credentials required for package signing'
     required: true
 runs:
   using: "composite"
@@ -12,34 +21,13 @@ runs:
       run: dotnet tool install --global NuGetKeyVaultSignTool
     - name: Sign NuGet Packages
       shell: pwsh
-      env:
-        KEY_VAULT_CREDENTIALS: ${{ inputs.azure-key-vault-credentials }}
       run: |
-
-        $credentials = $env:KEY_VAULT_CREDENTIALS | ConvertFrom-Json
-        # Do not echo $credentials, the individual secrets will not be protected
-
-        echo "Masking individual secrets"
-        echo "::add-mask::$($credentials.ClientId)"
-        echo "::add-mask::$($credentials.TenantId)"
-        echo "::add-mask::$($credentials.ClientSecret)"
-        echo "::add-mask::$($credentials.CertificateName)"
-
-        echo "Echoing to test"
-        echo $credentials.ClientId
-        echo $credentials.TenantId
-        echo $credentials.ClientSecret
-        echo $credentials.CertificateName
-
-        echo $credentials
-
-        echo "Calling NugetKeyVaultSignTool"
         NuGetKeyVaultSignTool sign nugets/*.nupkg `
         --file-digest sha256 `
         --timestamp-rfc3161 http://timestamp.digicert.com `
         --timestamp-digest sha256 `
         --azure-key-vault-url https://particularcodesigning.vault.azure.net `
-        --azure-key-vault-client-id $credentials.ClientId `
-        --azure-key-vault-tenant-id $credentials.TenantId `
-        --azure-key-vault-client-secret $credentials.ClientSecret `
-        --azure-key-vault-certificate $credentials.CertificateName
+        --azure-key-vault-client-id ${{ inputs.client-id }} `
+        --azure-key-vault-tenant-id ${{ inputs.tenant-id }} `
+        --azure-key-vault-client-secret ${{ inputs.client-secret }} `
+        --azure-key-vault-certificate ${{ inputs.certificate-name }}
