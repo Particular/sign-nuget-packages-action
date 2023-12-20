@@ -26,21 +26,27 @@ jobs:
           dotnet-version: 6.0.x
       - name: Build fake NuGet packages
         run: dotnet build test-project --configuration Release
+
+        # Really can't test the rest without access to the real certificate, which Dependabot can't have,
+        # plus the only thing Dependabot is updating is actions in this CI workflow anyway
+
       - name: Run
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: ./
         with:
           client-id: ${{ secrets.AZURE_KEY_VAULT_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_KEY_VAULT_TENANT_ID }}
           client-secret: ${{ secrets.AZURE_KEY_VAULT_CLIENT_SECRET }}
           certificate-name: ${{ secrets.AZURE_KEY_VAULT_CERTIFICATE_NAME }}
-          key-vault-url: ${{ secrets.AZURE_KEY_VAULT_URL }}
       - name: Publish NuGet packages
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: actions/upload-artifact@v3.1.1
         with:
           name: nugets-${{ matrix.os }}
           path: nugets/*
           retention-days: 1
       - name: Validate package signature
+        if: ${{ github.actor != 'dependabot[bot]' }}
         shell: pwsh
         run: |
           dotnet nuget verify nugets/TestLib.1.0.0.nupkg
