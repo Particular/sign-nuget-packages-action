@@ -13,6 +13,10 @@ inputs:
   certificate-name:
     description: 'Part of the Azure Key Vault credentials required for package signing'
     required: true
+  key-vault-url:
+    description: 'Only necessary for CI in this repo, to use the test-only Key Vault'
+    required: false
+    default: 'https://particularcodesigning.vault.azure.net'
 runs:
   using: "composite"
   steps:
@@ -28,7 +32,7 @@ runs:
           --file-digest sha256 `
           --timestamp-rfc3161 http://timestamp.digicert.com `
           --timestamp-digest sha256 `
-          --azure-key-vault-url https://particularcodesigning.vault.azure.net `
+          --azure-key-vault-url ${{ inputs.key-vault-url}} `
           --azure-key-vault-client-id ${{ inputs.client-id }} `
           --azure-key-vault-tenant-id ${{ inputs.tenant-id }} `
           --azure-key-vault-client-secret ${{ inputs.client-secret }} `
